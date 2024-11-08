@@ -1,0 +1,43 @@
+server:
+  port: 8080
+  address: 0.0.0.0
+spring:
+  profiles:
+    active: dev
+  redis:
+    host: ${health.redis.host}
+    port: ${health.redis.port}
+    #    password: ${health.redis.password}
+    database: ${health.redis.database}
+  main:
+    allow-circular-references: true
+  datasource:
+    druid:
+#      driver-class-name: com.mysql.cj.jdbc.Driver
+      driver-class-name: ${health.datasource.driver-class-name}
+      url: jdbc:mysql://${health.datasource.host}:${health.datasource.port}/${health.datasource.database}?serverTimezone=Asia/Shanghai&useUnicode=true&characterEncoding=utf-8&zeroDateTimeBehavior=convertToNull&useSSL=false&allowPublicKeyRetrieval=true
+      username: ${health.datasource.username}
+      password: ${health.datasource.password}
+
+mybatis:
+  #mapper配置文件
+  mapper-locations: classpath:com/itheima/mapper/*.xml
+  type-aliases-package: com.itheima.pojo
+  configuration:
+    #开启驼峰命名
+    map-underscore-to-camel-case: true
+# 配置打印日志
+logging:
+  level:
+    com:
+      itheima:
+        mapper: debug
+        service: info
+        controller: info
+health:
+  # 阿里云oss配置读取
+  alioss:
+    endpoint: ${health.alioss.endpoint}
+    access-key-id: ${health.alioss.access-key-id}
+    access-key-secret: ${health.alioss.access-key-secret}
+    bucket-name: ${health.alioss.bucket-name}
