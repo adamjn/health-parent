@@ -34,6 +34,7 @@ public class CheckItemServiceImpl implements CheckItemService {
 
     /**
      * 按id删除检查项
+     *
      * @param id
      * @return
      */
@@ -44,6 +45,7 @@ public class CheckItemServiceImpl implements CheckItemService {
 
     /**
      * 查询所有检查项目
+     *
      * @param
      * @return List<CheckItem>
      */
@@ -57,6 +59,7 @@ public class CheckItemServiceImpl implements CheckItemService {
 
     /**
      * 编辑检查项
+     *
      * @param checkItem
      * @return
      */
@@ -69,16 +72,15 @@ public class CheckItemServiceImpl implements CheckItemService {
 
     /**
      * 分页查询检查项目
+     *
      * @param
      * @return PageResult
      */
     @Override
     public PageResult pageQuery(QueryPageBean queryPageBean) {
-        PageHelper.startPage( queryPageBean.getCurrentPage(),  queryPageBean.getPageSize());
-        Page<CheckItem> page = checkItemMapper.pageQuery( queryPageBean);
-        for (CheckItem checkItem : page.getResult()) {
-            System.out.println(checkItem);
-        }
+        PageHelper.startPage(queryPageBean.getCurrentPage(), queryPageBean.getPageSize());
+        Page<CheckItem> page = checkItemMapper.pageQuery(queryPageBean);
+
         return new PageResult(page.getTotal(), page.getResult());
     }
 

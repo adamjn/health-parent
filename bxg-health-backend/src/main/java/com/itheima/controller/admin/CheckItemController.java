@@ -57,7 +57,6 @@ public class CheckItemController {
     @PostMapping("/edit")
     public Result edit(@RequestBody CheckItem checkItem) {   //编辑检查项成功
         log.info("编辑检查项成功: {}", checkItem);
-        log.info("编辑时的 CheckItem ID: {}", checkItem.getId());
         checkItemService.edit(checkItem);
         return new Result(true, "编辑检查项目成功", checkItem);
     }
