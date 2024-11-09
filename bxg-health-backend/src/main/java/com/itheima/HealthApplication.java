@@ -5,7 +5,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-@MapperScan("com.itheima.dao")
+@MapperScan("com.itheima.mapper")
 public class HealthApplication {
 
     public static void main(String[] args) {
