@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.itheima.mapper.SetmealMapper">
+
+    <insert id="add" parameterType="com.itheima.pojo.Setmeal" useGeneratedKeys="true" keyProperty="id">
+        insert into t_setmeal (code, name, helpCode, sex, age, price, remark, attention, img)
+        values (#{code}, #{name}, #{helpCode}, #{sex}, #{age}, #{price}, #{remark}, #{attention}, #{img})
+    </insert>
+    <update id="edit" parameterType="com.itheima.pojo.Setmeal" useGeneratedKeys="true" keyProperty="id">
+
+        update t_setmeal
+        <set>
+            <if test="code != null and code != ''">code = #{code},</if>
+            <if test="name != null and name != ''">name = #{name},</if>
+            <if test="helpCode != null and helpCode != ''">helpCode = #{helpCode},</if>
+            <if test="sex != null and sex != ''">sex = #{sex},</if>
+            <if test="age != null and age != ''">age = #{age},</if>
+            <if test="price != null and price != ''">price = #{price},</if>
+            <if test="remark != null">remark = #{remark},</if>
+            <if test="attention !=null and attention != ''">attention = #{attention},</if>
+            <if test="img != null">img = #{img},</if>
+        </set>
+    </update>
+
+    <select id="pageQuery" resultType="com.itheima.pojo.Setmeal" parameterType="String">
+        select * from t_setmeal
+
+        <if test="queryString != null and queryString.length > 0">
+            where code = #{queryString} or name = #{queryString} or helpCode = #{helpCode}
+        </if>
+
+    </select>
+
+
+
+</mapper>
