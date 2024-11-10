@@ -65,4 +65,13 @@ public interface CheckItemMapper {
 
     @Select("select * from t_checkitem where id = #{id}")
     CheckItem findById(Integer id);
+
+    /**
+     * 根据检查组id查询检查项id
+     *
+     * @param checkGroupId
+     * @return
+     */
+    @Select("select checkitem_id from t_checkgroup_checkitem where checkgroup_id =#{ checkGroupId}")
+    List<Integer> findCheckItemIdsByCheckGroupId(Integer checkGroupId);
 }

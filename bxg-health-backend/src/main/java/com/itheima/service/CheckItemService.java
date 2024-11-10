@@ -51,4 +51,12 @@ public interface CheckItemService {
      * @return CheckItem
      */
     CheckItem findById(Integer id);
+
+    /**
+     * 根据检查组id查询检查项id
+     *
+     * @param checkGroupId
+     * @return
+     */
+    List<Integer> findCheckItemIdsByCheckGroupId(Integer checkGroupId);
 }

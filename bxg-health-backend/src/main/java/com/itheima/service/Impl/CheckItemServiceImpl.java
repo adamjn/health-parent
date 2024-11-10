@@ -92,7 +92,19 @@ public class CheckItemServiceImpl implements CheckItemService {
      */
     @Override
     public CheckItem findById(Integer id) {
-        CheckItem checkItem = checkItemMapper.findById(id);
-        return checkItem;
+
+        return checkItemMapper.findById(id);
+    }
+
+    /**
+     * 根据检查组id查询检查项id
+     *
+     * @param checkGroupId
+     * @return
+     */
+    @Override
+    public List<Integer> findCheckItemIdsByCheckGroupId(Integer checkGroupId) {
+
+        return checkItemMapper.findCheckItemIdsByCheckGroupId(checkGroupId);
     }
 }

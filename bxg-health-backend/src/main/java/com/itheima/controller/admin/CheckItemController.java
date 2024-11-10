@@ -100,4 +100,17 @@ public class CheckItemController {
         return new Result(true, "查询检查项目成功", checkItemService.findById(id));
     }
 
+    /**
+     * 根据检查组id查询检查项id
+     *
+     * @param checkGroupId
+     * @return
+     */
+    @GetMapping("/findCheckItemIdsByCheckGroupId")
+    public Result findCheckItemIdsByCheckGroupId(@RequestParam("checkgroupId") Integer checkGroupId) {
+        log.info("查询检查项id: {}", checkGroupId);
+
+        return new Result(true, "查询检查项id成功", checkItemService.findCheckItemIdsByCheckGroupId(checkGroupId));
+    }
+
 }
