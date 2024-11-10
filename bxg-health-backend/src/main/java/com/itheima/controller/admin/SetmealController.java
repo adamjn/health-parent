@@ -8,10 +8,15 @@ import com.itheima.pojo.Setmeal;
 import com.itheima.service.SetmealService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.util.Set;
 import java.util.UUID;
 
 @RestController
@@ -22,7 +27,13 @@ public class SetmealController {
     private SetmealService setmealService;
 
     @Autowired
+    private StringRedisTemplate redisTemplate;
+
+    @Autowired
     private AliOssUtil aliOssUtil;
+
+    private static final String REDIS_UPLOADED_IMAGES_SET = "uploaded_images";
+    private static final String REDIS_USED_IMAGES_SET = "used_images";
 
     /**
      * 分页查询检查组
@@ -82,25 +93,49 @@ public class SetmealController {
 
 
     @PostMapping("/upload")
-    public Result upload(MultipartFile file) {
+    public Result upload(@RequestParam("imgFile") MultipartFile file) {
         log.info("文件上传：{}", file);
-
-        try {
-            //原始文件名
-            String originalFilename = file.getOriginalFilename();
-            //截取原始文件名的后缀   dfdfdf.png
-            String extension = originalFilename.substring(originalFilename.lastIndexOf("."));
-            //构造新文件名称
-            String objectName = UUID.randomUUID().toString() + extension;
-
-            //文件的请求路径
-            String filePath = aliOssUtil.upload(file.getBytes(), objectName);
-            return new Result(true, "图片上传成功", filePath);
-        } catch (IOException e) {
-            log.error("文件上传失败：{}", e);
+        if (file == null || file.isEmpty()) {
+            return new Result(false, "文件缺失");
         }
+        try {
+            // 计算文件的哈希值
+            String hash = calculateHash(file);
+            String originalFilename = file.getOriginalFilename();
+            String extension = originalFilename.substring(originalFilename.lastIndexOf("."));
+            String objectName = UUID.randomUUID().toString() + extension;
+            String filePath = aliOssUtil.upload(file.getBytes(), objectName);
 
-        return null;
+            // 将文件名加入 Redis 中 uploaded_images 集合中
+            redisTemplate.opsForSet().add(REDIS_UPLOADED_IMAGES_SET, objectName);
+
+            return new Result(true, "图片上传成功", filePath);
+        } catch (IOException | NoSuchAlgorithmException e) {
+            log.error("文件上传失败：{}", e);
+            return new Result(false, "文件上传失败");
+        }
     }
 
+    // 当套餐数据插入数据库后，将图片名称加入到 used_images 集合
+    public void addUsedImage(String imageName) {
+        redisTemplate.opsForSet().add(REDIS_USED_IMAGES_SET, imageName);
+    }
+
+    // 计算两个集合的差集，返回垃圾图片名称集合
+    public Set<String> getGarbageImages() {
+        return redisTemplate.opsForSet().difference(REDIS_UPLOADED_IMAGES_SET, REDIS_USED_IMAGES_SET);
+    }
+
+    // 计算文件哈希值
+    private String calculateHash(MultipartFile file) throws NoSuchAlgorithmException, IOException {
+        MessageDigest digest = MessageDigest.getInstance("SHA-256");
+        byte[] hashBytes = digest.digest(file.getBytes());
+        StringBuilder hashString = new StringBuilder();
+        for (byte b : hashBytes) {
+            hashString.append(String.format("%02x", b));
+        }
+        return hashString.toString();
+    }
 }
+
+
