@@ -9,6 +9,8 @@ import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 
+import java.util.List;
+
 @Mapper
 public interface SetmealMapper {
 
@@ -61,4 +63,6 @@ public interface SetmealMapper {
 
     @Insert("Insert into t_setmeal_checkgroup (setmeal_id, checkgroup_id) values (#{setmealId}, #{checkItemId})")
     void addSetmealCheckGroup(Integer setmealId, Integer checkItemId);
+
+
 }
