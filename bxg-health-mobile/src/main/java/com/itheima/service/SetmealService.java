@@ -5,7 +5,7 @@ import com.itheima.pojo.Setmeal;
 import java.util.List;
 
 public interface SetmealService {
-    List<Setmeal> findAll();
+    List<Setmeal> getSetmeal();
 
     Setmeal findById(Integer id);
 }

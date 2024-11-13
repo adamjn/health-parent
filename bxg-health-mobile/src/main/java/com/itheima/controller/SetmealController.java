@@ -2,7 +2,6 @@ package com.itheima.controller;
 
 import com.itheima.common.constant.MessageConstant;
 import com.itheima.common.entity.Result;
-import com.itheima.pojo.Setmeal;
 import com.itheima.service.SetmealService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,21 +26,21 @@ public class SetmealController {
     @PostMapping("/getSetmeal")
     public Result getSetmeal(){
         log.info("查询套餐数据");
-        try{
-            List<Setmeal> list = setmealService.findAll();
-            return new Result(true, MessageConstant.GET_SETMEAL_LIST_SUCCESS,list);
-        }catch (Exception e){
-            e.printStackTrace();
-            return new Result(false,MessageConstant.GET_SETMEAL_LIST_FAIL);
+        try {
+            List<com.itheima.pojo.Setmeal> lists = setmealService.getSetmeal();
+            return new Result(true, MessageConstant.GET_SETMEAL_LIST_SUCCESS, lists);
+        }catch (Exception e)   {
+            return new Result(false, MessageConstant.GET_SETMEAL_LIST_FAIL);
         }
+
     }
 
     @PostMapping("/findById")
     public Result findById(@RequestParam("id") Integer id) {
         log.info("根据id查询套餐数据: {}", id);
         try {
-            Setmeal setmeal = setmealService.findById(id);
-            return new Result(true, MessageConstant.QUERY_SETMEAL_SUCCESS, setmeal);
+            setmealService.findById(id);
+            return new Result(true, MessageConstant.QUERY_SETMEAL_SUCCESS, setmealService.findById(id));
 
         } catch (Exception e) {
             e.printStackTrace();
