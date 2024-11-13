@@ -4,10 +4,7 @@ import com.github.pagehelper.Page;
 import com.itheima.common.entity.QueryPageBean;
 import com.itheima.pojo.CheckGroup;
 import com.itheima.pojo.CheckItem;
-import org.apache.ibatis.annotations.Delete;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.*;
 
 import java.util.List;
 import java.util.Map;
@@ -72,8 +69,14 @@ public interface CheckGroupMapper {
     @Select("select checkitem_id from t_checkgroup_checkitem where checkgroup_id = #{id}")
     List<Integer> findCheckItemIdsByCheckGroupId(Integer id);
 
-    @Insert("insert into t_checkgroup_checkitem(checkgroup_id,checkitem_id) \n" +
-            "  \tvalues\n" +
-            "  (#{checkgroup_id},#{checkitem_id})")
-    void setCheckGroupAndCheckItem(Map map);
+
+
+
+
+
+
+
+    void addCheckItemsBatch(@Param("checkgroupId") Integer checkgroupId,
+                            @Param("checkitemIds") List<Integer> checkitemIds);
 }
+

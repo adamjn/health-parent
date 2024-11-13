@@ -14,9 +14,19 @@
     </select>
 
 
+    <!-- Insert CheckGroup and get generated ID -->
     <insert id="add" parameterType="com.itheima.pojo.CheckGroup" useGeneratedKeys="true" keyProperty="id">
-        INSERT INTO t_checkgroup (code, name, helpCode, sex, remark, attention)
-        values (#{code}, #{name}, #{helpCode}, #{sex}, #{remark}, #{attention})
+        INSERT INTO t_checkgroup (code, name, sex, helpCode, remark, attention)
+        VALUES (#{code}, #{name}, #{sex}, #{helpCode}, #{remark}, #{attention})
+    </insert>
+
+    <!-- Batch insert for check group and check item associations -->
+    <insert id="addCheckItemsBatch" parameterType="map">
+        INSERT INTO t_checkgroup_checkitem (checkgroup_id, checkitem_id)
+        VALUES
+        <foreach collection="checkitemIds" item="checkitemId" separator=",">
+            (#{checkgroupId}, #{checkitemId})
+        </foreach>
     </insert>
 
     <update id="edit" parameterType="com.itheima.pojo.CheckGroup" useGeneratedKeys="true" keyProperty="id">

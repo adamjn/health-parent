@@ -89,31 +89,29 @@ public class CheckGroupController {
      */
     @PostMapping("/add")
     public Result add(@RequestBody CheckGroup checkGroup, @RequestParam("checkitemIds") String checkItemIds) {
-
-        log.info("新增检查组: {}", checkGroup, "检查项: {}", checkItemIds);
+        log.info("Adding new CheckGroup: {}, with CheckItems: {}", checkGroup, checkItemIds);
 
         try {
             checkGroupService.add(checkGroup, checkItemIds);
+            return new Result(true, MessageConstant.ADD_CHECKGROUP_SUCCESS);
         } catch (Exception e) {
-            //新增失败
+            log.error("Failed to add CheckGroup: {}", e.getMessage(), e);
             return new Result(false, MessageConstant.ADD_CHECKGROUP_FAIL);
         }
-        //新增成功
-        return new Result(true, MessageConstant.ADD_CHECKGROUP_SUCCESS);
-
     }
+
 
     //根据检查组合id查询对应的所有检查项id
     @RequestMapping("/findCheckItemIdsByCheckGroupId")
-    public Result findCheckItemIdsByCheckGroupId(Integer id){
-        try{
-            List<Integer> checkitemIds =
-                    checkGroupService.findCheckItemIdsByCheckGroupId(id);
-            return new Result(true,MessageConstant.QUERY_CHECKITEM_SUCCESS,checkitemIds);
-        }catch (Exception e){
+    public Result findCheckItemIdsByCheckGroupId(Integer id) {
+        try {
+            List<Integer> checkitemIds = checkGroupService.findCheckItemIdsByCheckGroupId(id);
+            return new Result(true, MessageConstant.QUERY_CHECKITEM_SUCCESS, checkitemIds);
+        } catch (Exception e) {
             e.printStackTrace();
-            return new Result(false, MessageConstant.QUERY_CHECKITEM_FAIL);
+
         }
+        return new Result(false, MessageConstant.QUERY_CHECKITEM_FAIL);
     }
 
     /**
