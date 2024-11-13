@@ -1,5 +1,6 @@
 package com.itheima.controller.admin;
 
+import com.itheima.common.constant.MessageConstant;
 import com.itheima.common.entity.PageResult;
 import com.itheima.common.entity.QueryPageBean;
 import com.itheima.common.entity.Result;
@@ -58,7 +59,7 @@ public class SetmealController {
     @GetMapping("/findById")
     public Result findById(@RequestParam Integer id) {
         log.info("查询套餐: {}", id);
-        return new Result(true, "查询套餐成功", setmealService.findById(id));
+        return new Result(true, MessageConstant.QUERY_SETMEAL_SUCCESS, setmealService.findById(id));
     }
 
     /**
@@ -72,8 +73,14 @@ public class SetmealController {
     @PostMapping("/add")
     public Result add(@RequestBody Setmeal setmeal, @RequestParam("checkgroupIds") String checkgroupIds) {
         log.info("新增套餐: {}", setmeal, "检查组: {}", checkgroupIds);
-        setmealService.add(setmeal, checkgroupIds);
-        return new Result(true, "新增套餐成功");
+        try {
+            setmealService.add(setmeal, checkgroupIds);
+        } catch (Exception e) {
+            log.error("新增套餐失败：{}", e);
+            //新增套餐失败
+            return new Result(false, MessageConstant.ADD_SETMEAL_FAIL);
+        }
+        return new Result(true, MessageConstant.ADD_SETMEAL_SUCCESS);
     }
 
     /**
@@ -88,8 +95,15 @@ public class SetmealController {
     @PostMapping("/edit")
     public Result edit(@RequestBody Setmeal setmeal, @RequestParam("checkGroupIds") String checkgroupIds) {   //编辑检查项成功
         log.info("编辑套餐: {}", setmeal);
-        setmealService.edit(setmeal, checkgroupIds);
-        return new Result(true, "编辑套餐成功");
+        try {
+            setmealService.edit(setmeal, checkgroupIds);
+            return new Result(true, MessageConstant.EDIT_SETMEAL_SUCCESS);
+        } catch (Exception e) {
+            log.error("编辑套餐失败：{}", e);
+            //编辑套餐失败
+        }
+        return new Result(false, MessageConstant.EDIT_SETMEAL_FAIL);
+
     }
 
 
@@ -137,7 +151,6 @@ public class SetmealController {
         }
         return hashString.toString();
     }
-
 
 
 }
