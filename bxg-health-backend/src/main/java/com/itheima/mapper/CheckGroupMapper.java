@@ -10,6 +10,7 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 
 import java.util.List;
+import java.util.Map;
 
 @Mapper
 public interface CheckGroupMapper {
@@ -67,4 +68,12 @@ public interface CheckGroupMapper {
 
     @Delete("delete from t_checkgroup_checkitem where checkgroup_id = #{checkGroupId}")
     void deleteCheckItemByCheckGroupId(Integer checkGroupId);
+
+    @Select("select checkitem_id from t_checkgroup_checkitem where checkgroup_id = #{id}")
+    List<Integer> findCheckItemIdsByCheckGroupId(Integer id);
+
+    @Insert("insert into t_checkgroup_checkitem(checkgroup_id,checkitem_id) \n" +
+            "  \tvalues\n" +
+            "  (#{checkgroup_id},#{checkitem_id})")
+    void setCheckGroupAndCheckItem(Map map);
 }

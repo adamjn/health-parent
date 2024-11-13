@@ -12,7 +12,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class CheckGroupServiceImpl implements CheckGroupService {
@@ -110,5 +112,22 @@ public class CheckGroupServiceImpl implements CheckGroupService {
 
             checkGroupMapper.addCheckItem(checkGroupId, checkItemId);
         }
+    }
+
+    //向中间表(t_checkgroup_checkitem)插入数据（建立检查组和检查项关联关系）
+    public void setCheckGroupAndCheckItem(Integer checkGroupId,Integer[] checkitemIds){
+        if(checkitemIds != null && checkitemIds.length > 0){
+            for (Integer checkitemId : checkitemIds) {
+                Map<String,Integer> map = new HashMap<>();
+                map.put("checkgroup_id",checkGroupId);
+                map.put("checkitem_id",checkitemId);
+                checkGroupMapper.setCheckGroupAndCheckItem(map);
+            }
+        }
+    }
+
+    @Override
+    public List<Integer> findCheckItemIdsByCheckGroupId(Integer id) {
+        return checkGroupMapper.findCheckItemIdsByCheckGroupId(id);
     }
 }
