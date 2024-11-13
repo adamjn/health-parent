@@ -13,8 +13,8 @@ public class SetmealServiceImpl implements SetmealService {
     @Autowired
     private SetmealMapper setmealMapper;
     @Override
-    public List<Setmeal> getSetmeal() {
-        return setmealMapper.getSetmeal();
+    public List<Setmeal> findAll() {
+        return setmealMapper.findAll();
     }
 
     @Override
