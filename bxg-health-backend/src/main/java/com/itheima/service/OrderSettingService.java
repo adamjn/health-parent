@@ -7,6 +7,7 @@ import com.itheima.pojo.OrderSetting;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 public interface OrderSettingService {
 
@@ -33,16 +34,18 @@ public interface OrderSettingService {
      * @return
      */
     void addOrderSetting(OrderSetting orderSetting);
-
+    List<Map> getOrderSettingByMonth(String date);
     /**
      * 编辑预约设置
      * @param orderSetting
      */
     void updateOrderSetting(OrderSetting orderSetting);
+    public void add(List<OrderSetting> list);
 
-
-
-
-
-
+    void editNumberByDate(OrderSetting orderSetting);
 }
+
+
+
+
+
