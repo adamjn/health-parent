@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 @Service
@@ -16,12 +18,12 @@ public class OrderSettingServiceImpl implements OrderSettingService {
     private OrderSettingMapper orderSettingMapper;
 
     @Override
-    public List<OrderSetting> findOrderSettingByDateRange(Date start, Date end) {
+    public List<OrderSetting> findOrderSettingByDateRange(String start, String end) {
         return orderSettingMapper.findOrderSettingByDateRange(start, end);
     }
 
     @Override
-    public OrderSetting findOrderSettingByDate(Date orderDate) {
+    public OrderSetting findOrderSettingByDate(String orderDate) {
         return orderSettingMapper.findOrderSettingByDate(orderDate);
     }
 
@@ -51,8 +53,10 @@ public class OrderSettingServiceImpl implements OrderSettingService {
     }
 
     public List<Map> getOrderSettingByMonth(String date) {//2019-3
-        String dateBegin = date + "-1";//2019-3-1
-        String dateEnd = date + "-31";//2019-3-31
+        //得到当前月份第一天
+        String dateBegin = date + "-1";
+        //得到当前月份最后一天
+        String dateEnd = date + "-31";
         Map map = new HashMap();
         map.put("dateBegin",dateBegin);
         map.put("dateEnd",dateEnd);
@@ -69,7 +73,7 @@ public class OrderSettingServiceImpl implements OrderSettingService {
     }
 
     //根据日期修改可预约人数
-    public void editNumberByDate(OrderSetting orderSetting) {
+    public void editNumberByOrderDate(OrderSetting orderSetting) {
         long count = orderSettingMapper.findCountByOrderDate(orderSetting.getOrderDate());
         if(count > 0){
             //当前日期已经进行了预约设置，需要进行修改操作
