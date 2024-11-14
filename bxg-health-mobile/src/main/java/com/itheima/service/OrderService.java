@@ -1,9 +1,14 @@
 package com.itheima.service;
 
+import com.itheima.common.entity.Result;
 import com.itheima.pojo.Member;
-import com.itheima.pojo.Order;
+
+import java.util.Map;
 
 public interface OrderService {
 
-    Integer submitOrder(Member member);
+    Result submitOrder(Map<String, Object> member);
+
+    Map<String, Object> findById(Integer id);
+
 }

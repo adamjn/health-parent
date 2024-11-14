@@ -4,7 +4,7 @@
 <mapper namespace="com.itheima.mapper.CheckItemMapper">
 
     <!--根据检查组id查询检查项信息-->
-    <select id="findCheckItemById" resultType="com.itheima.pojo.CheckItem">
+    <select id="findCheckItemById" parameterType="int" resultType="com.itheima.pojo.CheckItem">
         select * from t_checkitem
         where id
                   in (select checkitem_id from t_checkgroup_checkitem where checkgroup_id=#{id})

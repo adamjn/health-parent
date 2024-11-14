@@ -21,13 +21,13 @@
                     javaType="ArrayList"
                     ofType="com.itheima.pojo.CheckGroup"
                     column="id"
-                    select="com.itheima.mapper.CheckGroupMapper.findById">
+                    select="com.itheima.mapper.CheckGroupMapper.findCheckGroupById">
         </collection>
     </resultMap>
 
 
 
-    <select id="findById" parameterType="Integer" resultMap="baseResultMap">
+    <select id="findById" parameterType="Integer" resultMap="findByIdResultMap">
         select *
         from t_setmeal
         where id = #{id}
