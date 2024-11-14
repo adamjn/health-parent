@@ -7,8 +7,8 @@ import java.util.Map;
 
 public interface OrderService {
 
-    Result submitOrder(Map<String, Object> member);
+    Result submitOrder(Map<String, Object> member) throws Exception;
 
-    Map<String, Object> findById(Integer id);
+    Map<String, Object> findById(Integer id) throws Exception;
 
 }

@@ -31,19 +31,20 @@ public class OrderController {
         String telephone = map.get("telephone") != null ? map.get("telephone").toString() : null;
         String validateCode = map.get("validateCode") != null ? map.get("validateCode").toString() : null;
 
-        // Retrieve the verification code from Redis
+        // 从redis中获取验证码
         String key = telephone + RedisMessageConstant.SENDTYPE_ORDER;
         String validateCodeInRedis = redisTemplate.opsForValue().get(key);
 
-        // Verify the validation code
+        // 验证验证码是否正确
         if (validateCodeInRedis == null || !validateCodeInRedis.equals(validateCode)) {
             return new Result(false, MessageConstant.VALIDATECODE_ERROR);
         }
 
-        // Proceed with the appointment process since the code is valid
+        // 对比成功后，调用服务完成预约业务
+
         map.put("orderType", Order.ORDERTYPE_WEIXIN); // Set appointment type, e.g., WeChat
 
-        Result result = new Result(false, MessageConstant.SEND_VALIDATECODE_FAIL);
+        Result result = new Result(false, MessageConstant.VALIDATECODE_ERROR);
 
         try {
             // Call orderService to handle the business logic
@@ -71,8 +72,8 @@ public class OrderController {
      * @param id 预约订单id
      * @return 套餐信息和会员信息
      */
-    @GetMapping("/findById/{id}")
-    public Result findById(@PathVariable("id") Integer id) {
+    @GetMapping("/findById")
+    public Result findById(@RequestParam("id") Integer id) {
         try {
             Map<String, Object> map = orderService.findById( id );
             //查询成功
