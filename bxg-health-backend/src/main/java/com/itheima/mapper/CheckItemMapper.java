@@ -74,4 +74,19 @@ public interface CheckItemMapper {
      */
     @Select("select checkitem_id from t_checkgroup_checkitem where checkgroup_id =#{ checkGroupId}")
     List<Integer> findCheckItemIdsByCheckGroupId(Integer checkGroupId);
+
+    /**
+     * 根据检查项id查询检查组id
+     * @param checkItemId
+     * @return
+     */
+    @Select(" select count(*) from t_checkgroup_checkitem where checkitem_id = #{checkitem_id}")
+    public long findCountByCheckItemId(Integer checkItemId);
+
+    /**
+     * 编辑检查项
+     * @param checkItem
+     */
+    public void edit(CheckItem checkItem);
+
 }

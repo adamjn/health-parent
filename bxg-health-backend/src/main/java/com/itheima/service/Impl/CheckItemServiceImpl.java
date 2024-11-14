@@ -40,6 +40,13 @@ public class CheckItemServiceImpl implements CheckItemService {
      */
     @Override
     public void deleteById(Integer id) {
+        //查询当前检查项是否和检查组关联
+        long count = checkItemMapper.findCountByCheckItemId(id);
+        if (count > 0) {
+            //当前检查项被引用，不能删除
+            throw new RuntimeException("当前检查项被引用，不能删除");
+        }
+
         checkItemMapper.deleteById(id);
     }
 

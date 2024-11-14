@@ -8,10 +8,7 @@ health:
     password: root
 #阿里云oss配置
   alioss:
-    endpoint: your endpoint address 例如 oss-cn-beijing.aliyuncs.com
-    access-key-id: your access key
-    access-key-secret: your access secret
-    bucket-name: your bucket name
+
 # redis配置
   redis:
     host: localhost

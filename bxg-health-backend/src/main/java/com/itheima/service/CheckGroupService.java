@@ -56,4 +56,6 @@ public interface CheckGroupService {
      * @return
      */
     void edit(CheckGroup checkGroup, String checkItemIds);
+
+    List<Integer> findCheckItemIdsByCheckGroupId(Integer id);
 }

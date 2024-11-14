@@ -4,6 +4,8 @@ import com.itheima.common.entity.PageResult;
 import com.itheima.common.entity.QueryPageBean;
 import com.itheima.pojo.Setmeal;
 
+import java.util.List;
+
 public interface SetmealService {
 
     /**
@@ -40,4 +42,8 @@ public interface SetmealService {
      * @return
      */
     void edit(Setmeal setmeal, String checkgroupIds);
+
+
+
+
 }

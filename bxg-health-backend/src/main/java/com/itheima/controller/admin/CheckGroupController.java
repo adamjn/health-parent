@@ -1,5 +1,6 @@
 package com.itheima.controller.admin;
 
+import com.itheima.common.constant.MessageConstant;
 import com.itheima.common.entity.PageResult;
 import com.itheima.common.entity.QueryPageBean;
 import com.itheima.common.entity.Result;
@@ -34,6 +35,7 @@ public class CheckGroupController {
 
     /**
      * 查询所有检查组
+     *
      * @param
      * @returnList<CheckGroup>
      */
@@ -41,22 +43,33 @@ public class CheckGroupController {
     public Result findAll() {
         log.info("查询所有检查组");
         List<CheckGroup> checkGroups = checkGroupService.findAll();
-        return new Result(true, "查询所有检查组成功", checkGroups);
+        if (checkGroups != null && checkGroups.size() > 0) {
+            return new Result(true, MessageConstant.QUERY_CHECKITEM_SUCCESS, checkGroups);
+        }
+        return new Result(false, MessageConstant.QUERY_CHECKITEM_FAIL);
+
     }
 
     /**
      * 查询检查组
-     * @param  id
+     *
+     * @param id
      * @return CheckGroup
      */
     @GetMapping("/findById")
     public Result findById(@RequestParam Integer id) {
         log.info("查询检查组: {}", id);
-        return new Result(true, "查询检查组成功", checkGroupService.findById(id));
+        CheckGroup checkGroup = checkGroupService.findById(id);
+        if (checkGroup != null) {
+            return new Result(true, MessageConstant.QUERY_CHECKGROUP_SUCCESS, checkGroup);
+        }
+        return new Result(false, MessageConstant.QUERY_CHECKGROUP_FAIL);
     }
+
 
     /**
      * 删除检查组
+     *
      * @param id
      * @return
      */
@@ -69,19 +82,41 @@ public class CheckGroupController {
 
     /**
      * 新增检查组
+     *
      * @param checkGroup
      * @param checkItemIds
      * @return
      */
     @PostMapping("/add")
     public Result add(@RequestBody CheckGroup checkGroup, @RequestParam("checkitemIds") String checkItemIds) {
-        log.info("新增检查组: {}", checkGroup, "检查项: {}", checkItemIds);
-        checkGroupService.add(checkGroup, checkItemIds);
-        return new Result(true, "新增检查组成功");
+        log.info("Adding new CheckGroup: {}, with CheckItems: {}", checkGroup, checkItemIds);
+
+        try {
+            checkGroupService.add(checkGroup, checkItemIds);
+            return new Result(true, MessageConstant.ADD_CHECKGROUP_SUCCESS);
+        } catch (Exception e) {
+            log.error("Failed to add CheckGroup: {}", e.getMessage(), e);
+            return new Result(false, MessageConstant.ADD_CHECKGROUP_FAIL);
+        }
+    }
+
+
+    //根据检查组合id查询对应的所有检查项id
+    @RequestMapping("/findCheckItemIdsByCheckGroupId")
+    public Result findCheckItemIdsByCheckGroupId(Integer id) {
+        try {
+            List<Integer> checkitemIds = checkGroupService.findCheckItemIdsByCheckGroupId(id);
+            return new Result(true, MessageConstant.QUERY_CHECKITEM_SUCCESS, checkitemIds);
+        } catch (Exception e) {
+            e.printStackTrace();
+
+        }
+        return new Result(false, MessageConstant.QUERY_CHECKITEM_FAIL);
     }
 
     /**
      * 编辑检查组
+     *
      * @param checkGroup
      * @param checkItemIds
      * @return

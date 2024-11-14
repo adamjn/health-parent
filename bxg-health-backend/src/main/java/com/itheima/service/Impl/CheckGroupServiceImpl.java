@@ -7,12 +7,13 @@ import com.itheima.common.entity.QueryPageBean;
 import com.itheima.mapper.CheckGroupMapper;
 import com.itheima.pojo.CheckGroup;
 import com.itheima.service.CheckGroupService;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class CheckGroupServiceImpl implements CheckGroupService {
@@ -34,6 +35,7 @@ public class CheckGroupServiceImpl implements CheckGroupService {
 
     /**
      * 查询所有检查组
+     *
      * @param
      * @returnList<CheckGroup>
      */
@@ -45,7 +47,8 @@ public class CheckGroupServiceImpl implements CheckGroupService {
 
     /**
      * 查询检查组
-     * @param  id
+     *
+     * @param id
      * @return CheckGroup
      */
     @Override
@@ -56,6 +59,7 @@ public class CheckGroupServiceImpl implements CheckGroupService {
 
     /**
      * 删除检查组
+     *
      * @param id
      * @return
      */
@@ -66,49 +70,58 @@ public class CheckGroupServiceImpl implements CheckGroupService {
 
     /**
      * 新增检查组
+     *
      * @param checkGroup
      * @param checkItemIds
      * @return
      */
 
     @Transactional
-    public void add(CheckGroup checkGroup,  String checkItemIds) {
+    public void add(CheckGroup checkGroup, String checkItemIds) {
+        // Insert CheckGroup and get generated ID
         checkGroupMapper.add(checkGroup);
-        List<Integer> checkitemIdList = new ArrayList<>();
 
-        // 将checkitemIds从字符串分割为数组并转换为整数后添加到List中
-        for (String id : checkItemIds.split(",")) {
-            checkitemIdList.add(Integer.parseInt(id.trim()));
+        // Parse checkItemIds and perform batch insertion for associations
+        List<Integer> checkitemIdList = parseCheckItemIds(checkItemIds);
+        if (checkitemIdList != null && checkitemIdList.size() > 0) {
+            checkGroupMapper.addCheckItemsBatch(checkGroup.getId(), checkitemIdList);
         }
+    }
 
-        for (Integer checkItemId : checkitemIdList) {
 
-            checkGroupMapper.addCheckItem(checkGroup.getId(), checkItemId);
-        }
+    // Helper method to parse checkItemIds from comma-separated string to List<Integer>
+    private List<Integer> parseCheckItemIds(String checkItemIds) {
+        return Arrays.stream(checkItemIds.split(","))
+                .map(String::trim)
+                .map(Integer::parseInt)
+                .collect(Collectors.toList());
     }
 
     /**
      * 编辑检查组
+     *
      * @param checkGroup
      * @param checkItemIds
      * @return
      */
     @Transactional
     public void edit(CheckGroup checkGroup, String checkItemIds) {
-        checkGroupMapper.edit(checkGroup);
+        checkGroupMapper.edit(checkGroup);  // Update CheckGroup details
         Integer checkGroupId = checkGroup.getId();
-        // 删除原有关联关系
+
+        // Delete existing associations
         checkGroupMapper.deleteCheckItemByCheckGroupId(checkGroupId);
-        List<Integer> checkitemIdList = new ArrayList<>();
 
-        // 将checkitemIds从字符串分割为数组并转换为整数后添加到List中
-        for (String id : checkItemIds.split(",")) {
-            checkitemIdList.add(Integer.parseInt(id.trim()));
-        }
-
-        for (Integer checkItemId : checkitemIdList) {
-
-            checkGroupMapper.addCheckItem(checkGroupId, checkItemId);
-        }
+        // Parse checkItemIds and perform batch insertion
+        List<Integer> checkitemIdList = parseCheckItemIds(checkItemIds);
+        checkGroupMapper.addCheckItemsBatch(checkGroupId, checkitemIdList);
     }
+
+
+    @Override
+    public List<Integer> findCheckItemIdsByCheckGroupId(Integer id) {
+        return checkGroupMapper.findCheckItemIdsByCheckGroupId(id);
+    }
+
+
 }

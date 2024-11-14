@@ -1,5 +1,6 @@
 package com.itheima.controller.admin;
 
+import com.itheima.common.constant.MessageConstant;
 import com.itheima.common.entity.PageResult;
 import com.itheima.common.entity.QueryPageBean;
 import com.itheima.common.entity.Result;
@@ -30,8 +31,14 @@ public class CheckItemController {
     @PostMapping("/add")
     public Result add(@RequestBody CheckItem checkItem) {
         log.info("新增检查项目: {}", checkItem);
-        checkItemService.add(checkItem);
-        return new Result(true, "新增检查项目成功", checkItem);
+        try {
+            checkItemService.add(checkItem);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new Result(false, MessageConstant.ADD_CHECKITEM_FAIL);
+        }
+
+        return new Result(true, MessageConstant.ADD_CHECKITEM_SUCCESS, checkItem);
     }
 
     /**
@@ -44,8 +51,15 @@ public class CheckItemController {
     @GetMapping("/delete")
     public Result deleteById(@RequestParam Integer id) {
         log.info("删除检查项目: {}", id);
-        checkItemService.deleteById(id);
-        return new Result(true, "删除检查项目成功", id);
+        try {
+            checkItemService.deleteById(id);
+        } catch (RuntimeException e) {
+            return new Result(false, e.getMessage());
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new Result(false, MessageConstant.DELETE_CHECKITEM_FAIL);
+        }
+        return new Result(true, MessageConstant.DELETE_CHECKITEM_SUCCESS, id);
     }
 
     /**
@@ -57,8 +71,13 @@ public class CheckItemController {
     @PostMapping("/edit")
     public Result edit(@RequestBody CheckItem checkItem) {   //编辑检查项成功
         log.info("编辑检查项成功: {}", checkItem);
-        checkItemService.edit(checkItem);
-        return new Result(true, "编辑检查项目成功", checkItem);
+        try {
+            checkItemService.edit(checkItem);
+        }catch (Exception e){
+            return new Result(false,MessageConstant.EDIT_CHECKITEM_FAIL);
+        }
+        return new Result(true,MessageConstant.EDIT_CHECKITEM_SUCCESS, checkItem);
+
     }
 
 
@@ -97,7 +116,15 @@ public class CheckItemController {
     @GetMapping("/findById")
     public Result findById(@RequestParam Integer id) {
         log.info("查询检查项目: {}", id);
-        return new Result(true, "查询检查项目成功", checkItemService.findById(id));
+
+        try{
+            CheckItem checkItem = checkItemService.findById(id);
+            return  new Result(true, MessageConstant.QUERY_CHECKITEM_SUCCESS,checkItemService.findById(id));
+        }catch (Exception e) {
+            e.printStackTrace();
+            return new Result(false, MessageConstant.QUERY_CHECKITEM_FAIL);
+        }
+
     }
 
     /**
