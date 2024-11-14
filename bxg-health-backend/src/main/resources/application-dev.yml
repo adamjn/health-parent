@@ -8,10 +8,7 @@ health:
     password: root
 #阿里云oss配置
   alioss:
-    endpoint:  oss-cn-beijing.aliyuncs.com
-    access-key-id: LTAI5t92ASgnmzDtvggA8sV2
-    access-key-secret: NyJXf33aIJolnBohWRGYBl97605cSh
-    bucket-name: sky-itcast-zq
+
 # redis配置
   redis:
     host: localhost
