@@ -17,7 +17,7 @@ public interface OrderSettingService {
      * @param  start当月的起始日期，end当月的最后一天
      * @return 预约设置列表
      */
-    List<OrderSetting> findOrderSettingByDateRange(Date start, Date end);
+    List<OrderSetting> findOrderSettingByDateRange(String start, String end);
 
     /**
      * 根据日期查询预约设置
@@ -25,7 +25,7 @@ public interface OrderSettingService {
      * @param orderDateDate
      * @return
      */
-    OrderSetting findOrderSettingByDate(Date orderDate);
+    OrderSetting findOrderSettingByDate(String orderDate);
 
     /**
      * 添加预约设置
@@ -42,7 +42,7 @@ public interface OrderSettingService {
     void updateOrderSetting(OrderSetting orderSetting);
     public void add(List<OrderSetting> list);
 
-    void editNumberByDate(OrderSetting orderSetting);
+    void editNumberByOrderDate(OrderSetting orderSetting);
 }
 
 

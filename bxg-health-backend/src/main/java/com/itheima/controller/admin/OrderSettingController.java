@@ -116,7 +116,7 @@ public class OrderSettingController {
      * @return
      */
     @GetMapping("/getOrderSettingByMonth")
-    public Result getOrderSettingByMonth(String date){//参数格式为：2019-03
+    public Result getOrderSettingByMonth(@RequestParam("month") String date){//参数格式为：2019-03
         try{
             List<Map> list = orderSettingService.getOrderSettingByMonth(date);
             //获取预约设置数据成功
@@ -140,10 +140,10 @@ public class OrderSettingController {
      * @param orderSetting
      * @return
      */
-    @PostMapping("/editNumberByDate")
-    public Result editNumberByDate(@RequestBody OrderSetting orderSetting){
+    @PostMapping("/editNumberByOrderDate")
+    public Result editNumberByOrderDate(@RequestBody OrderSetting orderSetting){
         try{
-            orderSettingService.editNumberByDate(orderSetting);
+            orderSettingService.editNumberByOrderDate(orderSetting);
             //预约设置成功
             return new Result(true,MessageConstant.ORDERSETTING_SUCCESS);
         }catch (Exception e){
