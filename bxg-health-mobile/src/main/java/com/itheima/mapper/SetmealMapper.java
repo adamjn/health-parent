@@ -8,9 +8,10 @@ import java.util.List;
 
 @Mapper
 public interface SetmealMapper {
+
     @Select("select * from t_setmeal")
     List<Setmeal> getSetmeal();
-
+    void add(Setmeal setmeal);
 
     Setmeal findById(Integer id);
 }

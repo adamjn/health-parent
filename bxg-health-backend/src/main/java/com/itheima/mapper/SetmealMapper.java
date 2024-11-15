@@ -65,6 +65,9 @@ public interface SetmealMapper {
     @Insert("Insert into t_setmeal_checkgroup (setmeal_id, checkgroup_id) values (#{setmealId}, #{checkItemId})")
     void addSetmealCheckGroup(Integer setmealId, Integer checkItemId);
 
-@Select("select s.name, count(o.id) value from t_order o, t_setmeal s where o.setmeal_id = s.id group by s.name ")
+    @Select("select s.name, count(o.id) value from t_order o, t_setmeal s where o.setmeal_id = s.id group by s.name ")
     List<Map<String, Object>> findSetmealCount();
+
+      @Select("select * from t_setmeal")
+    List<Setmeal> getSetmeal();
 }
