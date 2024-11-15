@@ -5,6 +5,7 @@ import com.itheima.common.entity.QueryPageBean;
 import com.itheima.pojo.Setmeal;
 
 import java.util.List;
+import java.util.Map;
 
 public interface SetmealService {
 
@@ -44,6 +45,7 @@ public interface SetmealService {
     void edit(Setmeal setmeal, String checkgroupIds);
 
 
+    List<Map<String, Object>> findSetmealCount();
 
 
 }

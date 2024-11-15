@@ -10,6 +10,7 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 
 import java.util.List;
+import java.util.Map;
 
 @Mapper
 public interface SetmealMapper {
@@ -64,5 +65,6 @@ public interface SetmealMapper {
     @Insert("Insert into t_setmeal_checkgroup (setmeal_id, checkgroup_id) values (#{setmealId}, #{checkItemId})")
     void addSetmealCheckGroup(Integer setmealId, Integer checkItemId);
 
-
+@Select("select s.name, count(o.id) value from t_order o, t_setmeal s where o.setmeal_id = s.id group by s.name ")
+    List<Map<String, Object>> findSetmealCount();
 }

@@ -19,7 +19,6 @@
         <maven.compiler.target>8</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <spring-boot.version>2.6.13</spring-boot.version>
-
         <lombok>1.18.20</lombok>
     </properties>
     <dependencyManagement>
@@ -37,6 +36,7 @@
                 <artifactId>lombok</artifactId>
                 <version>${lombok}</version>
             </dependency>
+
         </dependencies>
     </dependencyManagement>
     <parent>
